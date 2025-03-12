@@ -1,0 +1,29 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: security_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api-service:
+    build: ./api-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
